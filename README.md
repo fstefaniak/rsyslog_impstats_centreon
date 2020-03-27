@@ -22,18 +22,20 @@ you need to have access to the imtats log file in reading so set correctly the r
 
 | parameter  | Default Value  |  Description |
 | :------------: | :------------: | :------------: |
-| $1 | 10 (as Ryslog conf) | dynaFileCacheSize parameter that can be define in rsyslog global conf |
+| $1 | 10 (as Ryslog conf) | dynaFileCacheSize parameter that can be define in rsyslog global or action configuration (max value 1000) |
 | $2 | 90% | %use of dynaFileCacheSize that will generate warning state for centreon  |
 | $3 | /var/log/rsyslog_stats | absolute path to impstats log file |
 | $4 | $script_folder+/tmp | local storage directory for this script  |
 | $5 | 0 / none | active debug that will active verbose if set to "1"  |
 | $6 | 1 |  to desactivate omrelp supervision set to "0" |
 
-
+exemple:
+`sudo ./check_stats_rsyslog.sh 10 90 /var/log/rsyslog_stats_file.log /home/myuser/script_rsyslog_stats_centreon/tmp 1 1`
 
 ## queue name in centreon
 
-You can use descriptive name for action with this script with "type:name" syntax for exemple: `action( name="omfile:Fortigate" ... )`
+You can use descriptive name for action with this script with "type:name" syntax for exemple:
+`action( name="omfile:Fortigate" ... )`
 
 ## development
 
