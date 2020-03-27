@@ -29,8 +29,10 @@ you need to have access to the imtats log file in reading so set correctly the r
 | $5 | 0 / none | active debug that will active verbose if set to "1"  |
 | $6 | 1 |  to desactivate omrelp supervision set to "0" |
 
+All parameters are optional (default values are set if not defined or not correctly defined). You need to define all precedents parameters before set one.
+
 exemple:
-`sudo ./check_stats_rsyslog.sh 10 90 /var/log/rsyslog_stats_file.log /home/myuser/script_rsyslog_stats_centreon/tmp 1 1`
+`sudo ./check_stats_rsyslog.sh 10 90 /var/log/rsyslog_stats_file.log /home/myuser/rsyslog_impstats_centreon/tmp 1 0`
 
 ## queue name in centreon
 
