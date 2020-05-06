@@ -1,0 +1,4 @@
+{
+  "name": "rsyslog_impstats_centreon"
+, "files": [ { "git": 1 } ]
+} 

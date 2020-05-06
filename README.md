@@ -43,4 +43,6 @@ You can use descriptive name for action with this script with "type:name" syntax
 
 this script was created by Fabien Stéfaniak in is work of Network and Systems Administrator at the university of Angers.
 
+the code is validated by [shellcheck](http://www.shellcheck.net "shellcheck")
+
 [![Université d'Angers](http://marque.univ-angers.fr/_resources/Logos/_GENERIQUE/HORIZONTAL/ECRAN/PNG/ua_h_couleur_ecran.png "Université d'Angers")](https://www.univ-angers.fr "Université d'Angers")

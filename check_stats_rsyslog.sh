@@ -9,12 +9,12 @@
 
 #find folder where is this script
 SOURCE=${BASH_SOURCE[0]}
-while [ -h $SOURCE ]; do
- DIR=$( cd -P $( dirname $SOURCE ) && pwd )
- SOURCE=$(readlink $SOURCE)
+while [ -h "$SOURCE" ]; do
+ DIR=$( cd -P "$( dirname "$SOURCE" )" && pwd )
+ SOURCE=$(readlink "$SOURCE")
  [[ $SOURCE != /* ]] && SOURCE=$DIR/$SOURCE
 done
-script_dir=$( cd -P $( dirname $SOURCE ) && pwd )
+script_dir="$DIR"
 
 #arguments set
 if [ $# -eq 0 ] ; then
@@ -48,7 +48,7 @@ else
 	if [ -z "$5" ] ; then
 		debug=0;
 	else
-		if [ $5 -eq 1 ] ; then
+		if [ "$5" -eq 1 ] ; then
 			debug=1;
 		else
 			debug=0;
@@ -57,7 +57,7 @@ else
 	if [ -z "$6" ] ; then
 		omrelp_supervision=1;
 	else
-		if [ $5 -eq 0 ] ; then
+		if [ "$5" -eq 0 ] ; then
 			omrelp_supervision=0;
 		else
 			omrelp_supervision=1;
@@ -83,13 +83,13 @@ if [[ -d "$storage_path" && ! -L "$storage_path" ]] ; then
 		dynafile_total=$(wc -l "$storage_path/dynafile.evicted.counter" |awk '{print $1}')
 		if [ $debug -eq 1 ] ; then echo "dynaFiles evicted counter:$dynafile_total"; fi
 		if [ "$dynafile_total" -gt 0 ] ; then
-			for i in `seq 1 $dynafile_total`; do
-				name=$(cat "$storage_path/dynafile.evicted.counter" |awk -F ':' "NR==$i {print \$1}")
-				dynafile_evicted_counter+=(["$name"]="$(cat "$storage_path/dynafile.evicted.counter" |awk -F ':' "NR==$i {print \$2}")")
+			for i in $(seq 1 "$dynafile_total"); do
+				name=$(awk -F ':' "NR==$i {print \$1}" "$storage_path/dynafile.evicted.counter")
+				dynafile_evicted_counter+=(["$name"]="$(awk -F ':' "NR==$i {print \$2}" "$storage_path/dynafile.evicted.counter")")
 			done
 			if [ $debug -eq 1 ] ; then
-				echo "dynaFiles: ${!dynafile_evicted_counter[@]}";
-				echo "c evicted: ${dynafile_evicted_counter[@]}";
+				echo "dynaFiles:" "${!dynafile_evicted_counter[@]}";
+				echo "c evicted:" "${dynafile_evicted_counter[@]}";
 			fi
 			rm "$storage_path/dynafile.evicted.counter"
 		fi
@@ -99,13 +99,13 @@ if [[ -d "$storage_path" && ! -L "$storage_path" ]] ; then
 		actions_counter_total=$(wc -l "$storage_path/omfile.failed.counter" |awk '{print $1}')
 		if [ $debug -eq 1 ] ; then echo "omfile failed counter:$actions_total"; fi
 		if [ "$actions_counter_total" -gt 0 ] ; then
-			for i in `seq 1 $actions_counter_total`; do
-				name=$(cat "$storage_path/omfile.failed.counter" |awk -F ':' "NR==$i {print \$1}")
-				omfile_failed_counter+=(["$name"]="$(cat "$storage_path/omfile.failed.counter" |awk -F ':' "NR==$i {print \$2}")")
+			for i in $(seq 1 "$actions_counter_total"); do
+				name=$(awk -F ':' "NR==$i {print \$1}" "$storage_path/omfile.failed.counter")
+				omfile_failed_counter+=(["$name"]="$(awk -F ':' "NR==$i {print \$2}" "$storage_path/omfile.failed.counter")")
 			done
 			if [ $debug -eq 1 ] ; then
-				echo "  omfile: ${!omfile_failed_counter[@]}";
-				echo "c failed: ${omfile_failed_counter[@]}";
+				echo "  omfile:" "${!omfile_failed_counter[@]}";
+				echo "c failed:" "${omfile_failed_counter[@]}";
 			fi
 			rm "$storage_path/omfile.failed.counter"
 		fi
@@ -115,14 +115,14 @@ if [[ -d "$storage_path" && ! -L "$storage_path" ]] ; then
 		mainQ_counter_total=$(wc -l "$storage_path/mainQ.counter" |awk '{print $1}')
 		if [ $debug -eq 1 ] ; then echo "mainQ counter:$mainQ_counter_total"; fi
 		if [ "$mainQ_counter_total" -gt 0 ] ; then
-			for i in `seq 1 $mainQ_counter_total`; do
-				name=$(cat "$storage_path/mainQ.counter" |awk -F ':' "NR==$i {print \$1}")
-				mainQ_counter+=(["$name"]="$(cat "$storage_path/mainQ.counter" |awk -F ':' "NR==$i {print \$2}")")
+			for i in $(seq 1 "$mainQ_counter_total"); do
+				name=$(awk -F ':' "NR==$i {print \$1}" "$storage_path/mainQ.counter")
+				mainQ_counter+=(["$name"]="$(awk -F ':' "NR==$i {print \$2}" "$storage_path/mainQ.counter")")
 			done
 		fi
 		if [ $debug -eq 1 ] ; then
-			echo "  mainQ: ${!mainQ_counter[@]}";
-			echo "counter: ${mainQ_counter[@]}";
+			echo "  mainQ:" "${!mainQ_counter[@]}";
+			echo "counter:" "${mainQ_counter[@]}";
 		fi
 		rm "$storage_path/mainQ.counter"
 	fi
@@ -132,14 +132,14 @@ if [[ -d "$storage_path" && ! -L "$storage_path" ]] ; then
 			omrelp_failed_counter_total=$(wc -l "$storage_path/omrelp.failed.counter" |awk '{print $1}')
 			if [ $debug -eq 1 ] ; then echo "omrelp counter:$omrelp_failed_counter_total"; fi
 			if [ "$omrelp_failed_counter_total" -gt 0 ] ; then
-				for i in `seq 1 $omrelp_failed_counter_total`; do
-					name=$(cat "$storage_path/omrelp.failed.counter" |awk -F ':' "NR==$i {print \$1}")
-					omrelp_failed_counter+=(["$name"]="$(cat "$storage_path/omrelp.failed.counter" |awk -F ':' "NR==$i {print \$2}")")
+				for i in $(seq 1 "$omrelp_failed_counter_total"); do
+					name=$(awk -F ':' "NR==$i {print \$1}" "$storage_path/omrelp.failed.counter")
+					omrelp_failed_counter+=(["$name"]="$(awk -F ':' "NR==$i {print \$2}" "$storage_path/omrelp.failed.counter")")
 				done
 			fi
 			if [ $debug -eq 1 ] ; then
-				echo " omrelp: ${!omrelp_failed_counter[@]}";
-				echo "counter: ${omrelp_failed_counter[@]}";
+				echo " omrelp:" "${!omrelp_failed_counter[@]}";
+				echo "counter:" "${omrelp_failed_counter[@]}";
 			fi
 			rm "$storage_path/omrelp.failed.counter"
 		fi
@@ -151,40 +151,40 @@ fi
 #calculate the number of line of last segment
 start_line=$(grep -n 'global: origin=dynstats' "$stats_path" |tail -n 1 |awk -F ':' '{print $1}')
 total_lines=$(wc -l "$stats_path"|awk '{print $1}')
-extracted_lines=$(($total_lines -$start_line +1))
+extracted_lines=$((total_lines -start_line +1))
 tail -n "$extracted_lines" "$stats_path" > "$storage_path/stats.tmp"
 
 ###
 #Verify DynaFiles stats
 ###
 
-dynafile_total=$(grep 'dynafile' "$storage_path/stats.tmp" |wc -l)
+dynafile_total=$(grep -c 'dynafile' "$storage_path/stats.tmp")
 if [ "$dynafile_total" -gt 0 ] ; then
 
 	# search critics
 	#extract last evicted and maxused files logs with dynaFiles
 	declare -A dynafile_evicted
 	declare -A dynafile_maxused
-	for i in `seq 1 "$dynafile_total"`; do
+	for i in $(seq 1 "$dynafile_total"); do
 		name=$(grep 'dynafile' "$storage_path/stats.tmp" |awk -F ' ' "NR==$i {print \$8}"| sed 's/://')
 		dynafile_evicted+=(["$name"]="$(grep 'dynafile' "$storage_path/stats.tmp" |awk -F ' ' "NR==$i {print \$13}" |awk -F '=' '{print $2}')" )
 		dynafile_maxused+=(["$name"]="$(grep 'dynafile' "$storage_path/stats.tmp" |awk -F ' ' "NR==$i {print \$14}" |awk -F '=' '{print $2}')" )
 		#if not set counter (exemple: new dynafile template or first script execution)
-		if [ -z ${dynafile_evicted_counter["$name"]} ] ; then
+		if [ -z "${dynafile_evicted_counter["$name"]}" ] ; then
 			dynafile_evicted_counter+=(["$name"]=0)
 		fi
 	done
 	if [ $debug -eq 1 ] ; then
-		echo "dynaFiles: ${!dynafile_evicted[@]}";
-		echo "evicted: ${dynafile_evicted[@]}"; 
-		echo "maxused: ${dynafile_maxused[@]}";
+		echo "dynaFiles:" "${!dynafile_evicted[@]}";
+		echo "evicted:" "${dynafile_evicted[@]}"; 
+		echo "maxused:" "${dynafile_maxused[@]}";
 	fi
 	for name in "${!dynafile_evicted[@]}"
 	do
 		# Warning if maxused pass 90% of dynaFileCacheSize
-		if [ $((${dynafile_maxused[$name]} * 100 / $dynaFileCacheSize )) -ge $dynaFileCacheSize_warning ] ; then 
+		if [ $((${dynafile_maxused[$name]} * 100 / dynaFileCacheSize )) -ge "$dynaFileCacheSize_warning" ] ; then 
 			if [ "$centreon_state" -lt 1 ] ; then centreon_state=1;	fi
-			warn_info+=" dynafile $name maxused:${dynafile_maxused[$name]} soit $((${dynafile_maxused[$name]} * 100 / $dynaFileCacheSize ))%"
+			warn_info+=" dynafile $name maxused:${dynafile_maxused[$name]} soit $((${dynafile_maxused[$name]} * 100 / dynaFileCacheSize ))%"
 		fi
 		# use Delta to detect evicted
 		#test can be negative (if rsyslog restarted) or 0; if positive we have lost some log message
@@ -199,22 +199,22 @@ fi
 ###
 # omfile stats
 ###
-actions_total=$(grep 'omfile:' "$storage_path/stats.tmp" |wc -l)
+actions_total=$(grep -c 'omfile:' "$storage_path/stats.tmp")
 if [ "$actions_total" -gt 0 ] ; then
 	declare -A omfile_failed
-	for i in `seq 1 "$actions_total"`; do
+	for i in $(seq 1 "$actions_total"); do
         name="$(grep 'omfile:' "$storage_path/stats.tmp" |awk -F ':' "NR==$i {print \$5}")"
         #if no description name set number for name
         if [ "$name" == "omfile" ] ; then name=$i ; fi
 		omfile_failed+=(["$name"]="$(grep 'omfile:' "$storage_path/stats.tmp" |awk -F ' ' "NR==$i {print \$9}" |awk -F '=' '{print $2}')" )
 		#if not set counter (exemple: new dynafile template or first script execution)
-		if [ -z ${omfile_failed_counter["$name"]} ] ; then
+		if [ -z "${omfile_failed_counter["$name"]}" ] ; then
 			omfile_failed_counter+=(["$name"]=0)
 		fi
 	done
 	if [ $debug -eq 1 ] ; then
-		echo "omfile: ${!omfile_failed[@]}"
-		echo "failed: ${omfile_failed[@]}"
+		echo "omfile:" "${!omfile_failed[@]}"
+		echo "failed:" "${omfile_failed[@]}"
 	fi
 	for name in "${!omfile_failed[@]}"
 	do
@@ -232,25 +232,24 @@ fi
 # omrelp stats
 ###
 if [ $omrelp_supervision -eq 1 ] ; then
-	relp_total=$(grep 'omrelp:' "$storage_path/stats.tmp" |wc -l)
+	relp_total=$(grep -c 'omrelp:' "$storage_path/stats.tmp")
 	if [ "$relp_total" -gt 0 ] ; then
 		declare -A omrelp_failed
-		for i in `seq 1 "$relp_total"`; do
+		for i in $(seq 1 "$relp_total"); do
             name="$(grep 'omrelp:' "$storage_path/stats.tmp" |awk -F ':' "NR==$i {print \$5}")"
             #if no description name set number for name
             if [ "$name" == "omrelp" ] ; then name=$i ; fi
 			omrelp_failed+=(["$name"]="$(grep 'omrelp:' "$storage_path/stats.tmp" |awk -F ' ' "NR==$i {print \$9}" |awk -F '=' '{print $2}')" )
 			#if not set counter (exemple: new dynafile template or first script execution)
-			if [ -z ${omrelp_failed_counter["$name"]} ] ; then
+			if [ -z "${omrelp_failed_counter["$name"]}" ] ; then
 				omrelp_failed_counter+=(["$name"]=0)
 			fi
 		done
 		if [ $debug -eq 1 ] ; then
-			echo "omrelp: ${!omrelp_failed[@]}"
-			echo "failed: ${omrelp_failed[@]}"
+			echo "omrelp:" "${!omrelp_failed[@]}"
+			echo "failed:" "${omrelp_failed[@]}"
 		fi
-		for name in "${!omrelp_failed[@]}"
-		do
+		for name in "${!omrelp_failed[@]}"; do
 			# use Delta to detect failed
 			#test can be negative (if rsyslog restarted) or 0; if positive we have lost some log message
 			if [ $((${omrelp_failed[$name]} - ${omrelp_failed_counter[$name]} )) -gt 0 ] ; then
@@ -264,27 +263,27 @@ fi
 ###
 # main Q
 ###
-mainQ_total=$(grep 'main Q' "$storage_path/stats.tmp" |wc -l)
+mainQ_total=$(grep -c 'main Q' "$storage_path/stats.tmp")
 if [ "$mainQ_total" -eq 1 ] ; then
 	declare -A mainQ=(["full"]="$(grep 'main Q' "$storage_path/stats.tmp" |awk -F ' ' '{print $11}' |awk -F '=' '{print $2}')" ["discarded_full"]="$(grep 'main Q' "$storage_path/stats.tmp" |awk -F ' ' '{print $12}' |awk -F '=' '{print $2}')" ["discarded_nf"]="$(grep 'main Q' "$storage_path/stats.tmp" |awk -F ' ' '{print $13}' |awk -F '=' '{print $2}')");
 	if [ $debug -eq 1 ] ; then
-		echo "mainQ: ${!mainQ[@]}";
-		echo "value: ${mainQ[@]}";
+		echo "mainQ:" "${!mainQ[@]}";
+		echo "value:" "${mainQ[@]}";
 	fi
 	if [ -z "${mainQ_counter[full]}" ] ; then mainQ_counter+=(["full"]=0); fi
-	if [ $((${mainQ["full"]} - ${mainQ_counter["full"]} )) -gt 0 ] ; then
+	if [ $((mainQ["full"] - mainQ_counter["full"] )) -gt 0 ] ; then
 		if [ "$centreon_state" -lt 1 ] ; then centreon_state=1; fi
-		warn_info+=" mainQ was full $((${mainQ["full"]} - ${mainQ_counter["full"]} )) new times";
+		warn_info+=" mainQ was full $((mainQ["full"] - mainQ_counter["full"] )) new times";
 	fi
 	if [ -z "${mainQ_counter[discarded_full]}" ] ; then mainQ_counter+=(["discarded_full"]=0); fi
-	if [ $((${mainQ["discarded_full"]} - ${mainQ_counter["discarded_full"]} )) -gt 0 ] ; then
+	if [ $((mainQ["discarded_full"] - mainQ_counter["discarded_full"] )) -gt 0 ] ; then
 		if [ "$centreon_state" -lt 2 ] ; then centreon_state=2; fi
-		crit_info+=" mainQ was full and discarded $((${mainQ["discarded_full"]} - ${mainQ_counter["discarded_full"]} )) new times";
+		crit_info+=" mainQ was full and discarded $((mainQ["discarded_full"] - mainQ_counter["discarded_full"] )) new times";
 	fi
 	if [ -z "${mainQ_counter[discarded_nf]}" ] ; then mainQ_counter+=(["discarded_full"]=0); fi
-	if [ "$((${mainQ["discarded_nf"]} - ${mainQ_counter["discarded_nf"]} ))" -gt 0 ] ; then
+	if [ "$((mainQ["discarded_nf"] - mainQ_counter["discarded_nf"] ))" -gt 0 ] ; then
 		if [ "$centreon_state" -lt 2 ] ; then centreon_state=2; fi
-		crit_info+=" mainQ was nearly full and discarded $((${mainQ["discarded_nf"]} - ${mainQ_counter["discarded_nf"]} )) new times";
+		crit_info+=" mainQ was nearly full and discarded $((mainQ["discarded_nf"] - mainQ_counter["discarded_nf"] )) new times";
 	fi
 else
 	if [ "$centreon_state" -lt 1 ] ; then centreon_state=3; fi
@@ -325,22 +324,22 @@ fi
 perf=''
 if [ "$dynafile_total" -gt 0 ] ; then
 	perf='|';
-	warning=$(($dynaFileCacheSize*$dynaFileCacheSize_warning/100))
+	warning=$((dynaFileCacheSize*dynaFileCacheSize_warning/100))
 	for name in "${!dynafile_evicted[@]}"
 	do
 		delta_evicted=$((${dynafile_evicted[$name]} - ${dynafile_evicted_counter[$name]} ))
-		if [ "$delta_evicted" -lt 0 ] ; then delta_evicted = 0; fi
+		if [ "$delta_evicted" -lt 0 ] ; then delta_evicted=0; fi
 		perf+="$name.evicted=$delta_evicted;1;1;0;10000;  $name.maxused=${dynafile_maxused[$name]};$warning;$dynaFileCacheSize;0;$dynaFileCacheSize; "
 	done
 fi
 if [ "$mainQ_total" -eq 1 ] ; then
-	delta_full="$((${mainQ["full"]} - ${mainQ_counter["full"]} ))"
-	delta_discarded_full="$((${mainQ["discarded_full"]} - ${mainQ_counter["discarded_full"]} ))"
-	delta_discarded_nf="$((${mainQ["discarded_nf"]} - ${mainQ_counter["discarded_nf"]} ))"
+	delta_full="$((mainQ["full"] - mainQ_counter["full"] ))"
+	delta_discarded_full="$((mainQ["discarded_full"] - mainQ_counter["discarded_full"] ))"
+	delta_discarded_nf="$((mainQ["discarded_nf"] - mainQ_counter["discarded_nf"] ))"
 	perf+="mainQ.full=$delta_full;1;1;0;100; mainQ.discarded.full=$delta_discarded_full;1;1;0;10000; mainQ.discarded.nf=$delta_discarded_nf;1;1;0;10000; ";
 fi
 
-resource_usage_total="$(grep 'resource-usage' "$storage_path/stats.tmp" |wc -l)"
+resource_usage_total="$(grep -c 'resource-usage' "$storage_path/stats.tmp")"
 if [ "$resource_usage_total" -eq 1 ] ; then
 	open_files="$(grep 'resource-usage' "$storage_path/stats.tmp" |awk -F ' ' '{print $17}' |awk -F '=' '{print $2}')"
 	perf+=" openfiles=$open_files;1500;3000;0;5000;"
